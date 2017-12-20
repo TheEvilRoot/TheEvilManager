@@ -1,4 +1,9 @@
 /build
 app.iml
-/src/androidTest/*/*/*
-/src/test/*/*/*/*
+/.DS_Store
+/src/.DS_Store
+/src/main/.DS_Store
+/src/main/java/.DS_Store
+/src/main/java/com/.DS_Store/
+/src/main/java/com/theevilroot/.DS_Store
+/src/main/java/com/theevilroot/theevilmanager/.DS_Store
