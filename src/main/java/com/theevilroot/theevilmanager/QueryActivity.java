@@ -5,9 +5,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.JsonElement;
@@ -29,6 +31,7 @@ public class QueryActivity extends AppCompatActivity {
     public Button submit_button;
     public ListView resultList;
     public Button add_profile_button;
+    public Spinner query_type_chooser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,10 @@ public class QueryActivity extends AppCompatActivity {
         submit_button = (Button) findViewById(R.id.submit_button);
         resultList = (ListView) findViewById(R.id.userlist);
         add_profile_button = (Button) findViewById(R.id.add_profile_button);
+        query_type_chooser = (Spinner) findViewById(R.id.query_type);
+        query_type_chooser.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{
+                "Anything","UID", "Name", "Surname", "Classification", "Aliases"
+        }));
     }
 
     public void initEvents() {
@@ -75,13 +82,21 @@ public class QueryActivity extends AppCompatActivity {
             String query = query_field.getText().toString();
             Utilities.runAsync(() -> {
                 try {
-                    String response = Jsoup.connect(Utilities.getBackendURL("getProfile")).data("data", query).get().text();
+                    String response;
+                    if(query_type_chooser.getSelectedItemPosition() == 0) {
+                        response = Jsoup.connect(Utilities.getBackendURL("getProfile")).data("data", query).get().text();
+                    }else{
+                        response = Jsoup.connect(Utilities.getBackendURL("identifyProfile")).data("data", query).data("type", query_type_chooser.getSelectedItem().toString().toLowerCase()).get().text();
+                    }
+                    if(query.equals("*")) {
+                        response = Jsoup.connect(Utilities.getBackendURL("getProfiles")).get().text();
+                    }
                     JsonObject obj = new JsonParser().parse(response).getAsJsonObject().get("response").getAsJsonObject();
-                    if(obj.has("error")) {
+                    if (obj.has("error")) {
                         runOnUiThread(() -> output_field.setText("Error: " + obj.get("error").getAsString()));
                         return;
                     }
-                    if(!obj.has("users")) {
+                    if (!obj.has("users")) {
                         runOnUiThread(() -> output_field.setText("Invalid response"));
                         return;
                     }

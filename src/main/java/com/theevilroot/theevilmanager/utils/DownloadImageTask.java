@@ -1,18 +1,23 @@
 package com.theevilroot.theevilmanager.utils;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.theevilroot.theevilmanager.R;
+
 import java.io.InputStream;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
+    Activity act;
 
-    public DownloadImageTask(ImageView bmImage) {
+    public DownloadImageTask(ImageView bmImage, Activity activity) {
         this.bmImage = bmImage;
+        this.act = activity;
     }
 
     protected Bitmap doInBackground(String... urls) {
@@ -29,6 +34,10 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
+        if(result == null) {
+            act.runOnUiThread(() -> bmImage.setImageDrawable(act.getDrawable(R.drawable.unknown)));
+        }else {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

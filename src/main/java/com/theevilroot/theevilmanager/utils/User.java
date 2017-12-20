@@ -29,6 +29,7 @@ public class User {
             case "asset": return R.drawable.asset;
             case "threat": return R.drawable.threat;
             case "admin": return R.drawable.asset;
+            case "catalyst": return R.drawable.catalyst;
             default:{
                 if(classification.toLowerCase().contains("interface"))
                     return R.drawable.ainterface;

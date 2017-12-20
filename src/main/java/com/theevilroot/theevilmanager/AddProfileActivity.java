@@ -10,15 +10,12 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.theevilroot.theevilmanager.utils.User;
 import com.theevilroot.theevilmanager.utils.Utilities;
 
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddProfileActivity extends AppCompatActivity{
@@ -36,17 +33,17 @@ public class AddProfileActivity extends AppCompatActivity{
     }
 
     public void initElements() {
-        name_field = (EditText) findViewById(R.id.name_field);
+        name_field = (EditText) findViewById(R.id.update_uid_field);
         surname_field = (EditText) findViewById(R.id.surname_field);
         class_field = (EditText) findViewById(R.id.class_field);
         picture_field = (EditText) findViewById(R.id.picture_field);
         aliases_field = (EditText) findViewById(R.id.aliases_field);
-        submit_button = (Button) findViewById(R.id.submit_add_button);
+        submit_button = (Button) findViewById(R.id.submit_update_button);
         output_field = (TextView) findViewById(R.id.output_add_field);
     }
     public void initEvents() {
         picture_field.setOnLongClickListener(view -> {
-            picture_field.setText("http://" + "/Assets/POI/" + picture_field.getText() + ".png");
+            picture_field.setText("http://" + AppConfig.INSTANCE.host + "/Assets/POI/" + picture_field.getText() + ".png");
             return true;
         });
         submit_button.setOnClickListener(view -> {
@@ -73,6 +70,13 @@ public class AddProfileActivity extends AppCompatActivity{
                         return;
                     }else {
                         runOnUiThread(() -> output_field.setText(obj.get("response").getAsString()));
+                        runOnUiThread(() -> {
+                            name_field.setText("");
+                            surname_field.setText("");
+                            class_field.setText("");
+                            picture_field.setText("");
+                            aliases_field.setText("");
+                        });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
