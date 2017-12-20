@@ -26,3 +26,7 @@
         }
         return $rows;
     }
+
+    function isValidType($str) {
+        return $str == "uid" || $str == "name" || $str == "surname" || $str == "classification" || $str == "alias";
+    }
