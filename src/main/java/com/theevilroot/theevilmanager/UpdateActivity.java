@@ -43,7 +43,7 @@ public class UpdateActivity extends AppCompatActivity{
         output = (TextView) findViewById(R.id.output);
         type_chooser = (Spinner) findViewById(R.id.update_profile_chooser);
         type_chooser.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{
-                "Name", "Surname", "Classification", "Aliases", "UID"
+                "Name", "Surname", "Classification", "Aliases", "Picture","UID"
         }));
     }
 
